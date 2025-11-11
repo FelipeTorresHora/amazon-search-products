@@ -1,4 +1,5 @@
 """Product Pydantic schemas."""
+
 from datetime import datetime
 from typing import Optional, List
 from pydantic import BaseModel, Field, HttpUrl
@@ -8,8 +9,10 @@ from pydantic import BaseModel, Field, HttpUrl
 # PRODUCT SCHEMAS
 # =============================================================================
 
+
 class ProductBase(BaseModel):
     """Base product schema."""
+
     asin: str = Field(..., min_length=10, max_length=10)
     title: str
     price: Optional[float] = None
@@ -21,6 +24,7 @@ class ProductBase(BaseModel):
 
 class ProductDetail(ProductBase):
     """Detailed product information."""
+
     original_price: Optional[float] = None
     discount_percentage: Optional[float] = None
     product_url: HttpUrl
@@ -38,6 +42,7 @@ class ProductDetail(ProductBase):
 
 class ProductSearchResult(BaseModel):
     """Product search result item."""
+
     asin: str
     title: str
     price: Optional[float]
@@ -52,6 +57,7 @@ class ProductSearchResult(BaseModel):
 
 class ProductSearchResponse(BaseModel):
     """Product search response with pagination."""
+
     products: List[ProductSearchResult]
     total: int
     page: int = 1
@@ -61,18 +67,17 @@ class ProductSearchResponse(BaseModel):
 
 class ProductSearchFilters(BaseModel):
     """Filters for product search."""
+
     query: str = Field(..., min_length=1, max_length=200)
     category: Optional[str] = Field(
-        None,
-        pattern="^(eletronicos|beleza|brinquedos|construcao|pet|all)$"
+        None, pattern="^(eletronicos|beleza|brinquedos|construcao|pet|all)$"
     )
     min_price: Optional[float] = Field(None, ge=0)
     max_price: Optional[float] = Field(None, ge=0)
     min_rating: Optional[float] = Field(None, ge=0, le=5)
     is_prime: Optional[bool] = None
     sort_by: Optional[str] = Field(
-        "relevance",
-        pattern="^(relevance|price_asc|price_desc|rating|popularity)$"
+        "relevance", pattern="^(relevance|price_asc|price_desc|rating|popularity)$"
     )
     page: int = Field(1, ge=1)
     per_page: int = Field(20, ge=1, le=100)
@@ -80,11 +85,13 @@ class ProductSearchFilters(BaseModel):
 
 class BulkSearchRequest(BaseModel):
     """Bulk product search (Business+ only)."""
+
     asins: List[str] = Field(..., min_length=1, max_length=100)
 
 
 class BulkSearchResponse(BaseModel):
     """Bulk search response."""
+
     products: List[ProductDetail]
     found: int
     not_found: List[str]
@@ -94,8 +101,10 @@ class BulkSearchResponse(BaseModel):
 # PRODUCT HISTORY
 # =============================================================================
 
+
 class PricePoint(BaseModel):
     """Single price data point."""
+
     date: datetime
     price: float
     discount: Optional[float] = None
@@ -103,6 +112,7 @@ class PricePoint(BaseModel):
 
 class RatingPoint(BaseModel):
     """Single rating data point."""
+
     date: datetime
     rating: float
     num_ratings: int
@@ -110,6 +120,7 @@ class RatingPoint(BaseModel):
 
 class ProductHistory(BaseModel):
     """Historical product data."""
+
     asin: str
     title: str
     current_price: Optional[float]
@@ -118,18 +129,17 @@ class ProductHistory(BaseModel):
     lowest_price: Optional[float]
     highest_price: Optional[float]
     average_price: Optional[float]
-    price_trend: str = Field(
-        ...,
-        pattern="^(increasing|decreasing|stable)$"
-    )
+    price_trend: str = Field(..., pattern="^(increasing|decreasing|stable)$")
 
 
 # =============================================================================
 # ANALYTICS
 # =============================================================================
 
+
 class CategoryAnalytics(BaseModel):
     """Analytics for a product category."""
+
     category: str
     total_products: int
     average_price: float
@@ -142,6 +152,7 @@ class CategoryAnalytics(BaseModel):
 
 class MarketTrends(BaseModel):
     """Market trends data."""
+
     category: str
     period: str  # "7d", "30d", "90d"
     price_trend: str

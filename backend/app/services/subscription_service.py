@@ -1,4 +1,5 @@
 """Subscription service - manage user subscriptions and billing."""
+
 from typing import Optional, List
 from datetime import datetime, timedelta
 from uuid import UUID
@@ -42,8 +43,7 @@ class SubscriptionService:
 
         if not subscription:
             raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="Subscription not found"
+                status_code=status.HTTP_404_NOT_FOUND, detail="Subscription not found"
             )
 
         # Get limits for plan
@@ -120,15 +120,12 @@ class SubscriptionService:
             {"session_id": str, "checkout_url": str}
         """
         # Get user
-        result = await self.db.execute(
-            select(User).where(User.id == user_id)
-        )
+        result = await self.db.execute(select(User).where(User.id == user_id))
         user = result.scalar_one_or_none()
 
         if not user:
             raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="User not found"
+                status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
             )
 
         # Get subscription
@@ -139,8 +136,7 @@ class SubscriptionService:
 
         if not price_id:
             raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail=f"Invalid plan: {plan}"
+                status_code=status.HTTP_400_BAD_REQUEST, detail=f"Invalid plan: {plan}"
             )
 
         try:
@@ -164,10 +160,12 @@ class SubscriptionService:
             session = stripe.checkout.Session.create(
                 customer=customer_id,
                 payment_method_types=["card"],
-                line_items=[{
-                    "price": price_id,
-                    "quantity": 1,
-                }],
+                line_items=[
+                    {
+                        "price": price_id,
+                        "quantity": 1,
+                    }
+                ],
                 mode="subscription",
                 success_url=success_url or settings.STRIPE_SUCCESS_URL,
                 cancel_url=cancel_url or settings.STRIPE_CANCEL_URL,
@@ -185,12 +183,10 @@ class SubscriptionService:
         except stripe.error.StripeError as e:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail=f"Stripe error: {str(e)}"
+                detail=f"Stripe error: {str(e)}",
             )
 
-    async def create_customer_portal_session(
-        self, user_id: UUID
-    ) -> dict:
+    async def create_customer_portal_session(self, user_id: UUID) -> dict:
         """
         Create Stripe customer portal session for managing subscription.
 
@@ -202,7 +198,7 @@ class SubscriptionService:
         if not subscription or not subscription.stripe_customer_id:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail="No active Stripe subscription found"
+                detail="No active Stripe subscription found",
             )
 
         try:
@@ -216,7 +212,7 @@ class SubscriptionService:
         except stripe.error.StripeError as e:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail=f"Stripe error: {str(e)}"
+                detail=f"Stripe error: {str(e)}",
             )
 
     async def handle_stripe_webhook(self, event: dict) -> bool:
@@ -273,9 +269,7 @@ class SubscriptionService:
             subscription.api_key = generate_api_key()
 
             # Update user role
-            result = await self.db.execute(
-                select(User).where(User.id == UUID(user_id))
-            )
+            result = await self.db.execute(select(User).where(User.id == UUID(user_id)))
             user = result.scalar_one_or_none()
             if user:
                 user.role = UserRole(plan.upper())
@@ -321,9 +315,7 @@ class SubscriptionService:
         customer_id = invoice_data.get("customer")
 
         result = await self.db.execute(
-            select(Subscription).where(
-                Subscription.stripe_customer_id == customer_id
-            )
+            select(Subscription).where(Subscription.stripe_customer_id == customer_id)
         )
         subscription = result.scalar_one_or_none()
 

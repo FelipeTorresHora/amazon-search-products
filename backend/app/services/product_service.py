@@ -1,4 +1,5 @@
 """Product service - Amazon product search and analysis."""
+
 from typing import List, Dict, Any, Optional
 import httpx
 from datetime import datetime, timedelta
@@ -43,7 +44,7 @@ class ProductService:
                 total=len(products),
                 page=filters.page,
                 per_page=filters.per_page,
-                total_pages=(len(products) + filters.per_page - 1) // filters.per_page
+                total_pages=(len(products) + filters.per_page - 1) // filters.per_page,
             )
 
         except Exception as e:
@@ -54,7 +55,7 @@ class ProductService:
                 total=0,
                 page=filters.page,
                 per_page=filters.per_page,
-                total_pages=0
+                total_pages=0,
             )
 
     async def _search_local_data(
@@ -91,9 +92,12 @@ class ProductService:
 
             # Filter by price
             if filters.min_price is not None:
-                df["price_numeric"] = df["product_price"].str.replace(
-                    "R$ ", ""
-                ).str.replace(",", ".").astype(float, errors="ignore")
+                df["price_numeric"] = (
+                    df["product_price"]
+                    .str.replace("R$ ", "")
+                    .str.replace(",", ".")
+                    .astype(float, errors="ignore")
+                )
                 df = df[df["price_numeric"] >= filters.min_price]
 
             if filters.max_price is not None:

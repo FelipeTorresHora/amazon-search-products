@@ -1,6 +1,7 @@
 """
 FastAPI main application module.
 """
+
 from contextlib import asynccontextmanager
 from typing import AsyncGenerator
 
@@ -81,6 +82,7 @@ app.add_middleware(GZipMiddleware, minimum_size=1000)
 # EXCEPTION HANDLERS
 # =============================================================================
 
+
 @app.exception_handler(Exception)
 async def global_exception_handler(request, exc):
     """
@@ -93,18 +95,16 @@ async def global_exception_handler(request, exc):
     if settings.is_production:
         return JSONResponse(
             status_code=500,
-            content={"detail": "Internal server error. Please try again later."}
+            content={"detail": "Internal server error. Please try again later."},
         )
 
-    return JSONResponse(
-        status_code=500,
-        content={"detail": str(exc)}
-    )
+    return JSONResponse(status_code=500, content={"detail": str(exc)})
 
 
 # =============================================================================
 # ROOT ENDPOINTS
 # =============================================================================
+
 
 @app.get("/")
 async def root():
@@ -150,44 +150,34 @@ async def readiness_check():
 
 # Authentication & Authorization
 app.include_router(
-    auth.router,
-    prefix=f"{settings.API_V1_PREFIX}/auth",
-    tags=["Authentication"]
+    auth.router, prefix=f"{settings.API_V1_PREFIX}/auth", tags=["Authentication"]
 )
 
 # User Management
 app.include_router(
-    users.router,
-    prefix=f"{settings.API_V1_PREFIX}/users",
-    tags=["Users"]
+    users.router, prefix=f"{settings.API_V1_PREFIX}/users", tags=["Users"]
 )
 
 # Product Search & Analysis
 app.include_router(
-    products.router,
-    prefix=f"{settings.API_V1_PREFIX}/products",
-    tags=["Products"]
+    products.router, prefix=f"{settings.API_V1_PREFIX}/products", tags=["Products"]
 )
 
 # Subscriptions & Billing
 app.include_router(
     subscriptions.router,
     prefix=f"{settings.API_V1_PREFIX}/subscriptions",
-    tags=["Subscriptions"]
+    tags=["Subscriptions"],
 )
 
 # Price & Stock Alerts
 app.include_router(
-    alerts.router,
-    prefix=f"{settings.API_V1_PREFIX}/alerts",
-    tags=["Alerts"]
+    alerts.router, prefix=f"{settings.API_V1_PREFIX}/alerts", tags=["Alerts"]
 )
 
 # Analytics & Reporting
 app.include_router(
-    analytics.router,
-    prefix=f"{settings.API_V1_PREFIX}/analytics",
-    tags=["Analytics"]
+    analytics.router, prefix=f"{settings.API_V1_PREFIX}/analytics", tags=["Analytics"]
 )
 
 
@@ -198,7 +188,8 @@ app.include_router(
 if __name__ == "__main__":
     import uvicorn
 
-    print(f"""
+    print(
+        f"""
     ╔══════════════════════════════════════════════════════════════╗
     ║                                                              ║
     ║  🚀 {settings.APP_NAME} v{settings.APP_VERSION}                     ║
@@ -211,7 +202,8 @@ if __name__ == "__main__":
     ║  ❤️  Health: http://localhost:8000/health                    ║
     ║                                                              ║
     ╚══════════════════════════════════════════════════════════════╝
-    """)
+    """
+    )
 
     uvicorn.run(
         "app.main:app",

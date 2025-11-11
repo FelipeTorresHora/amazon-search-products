@@ -1,6 +1,7 @@
 """
 Database base configuration and utilities.
 """
+
 from datetime import datetime
 import uuid
 from typing import Any
@@ -38,25 +39,17 @@ class BaseModel(Base):
         default=uuid.uuid4,
         unique=True,
         nullable=False,
-        index=True
+        index=True,
     )
 
-    created_at = Column(
-        DateTime,
-        default=datetime.utcnow,
-        nullable=False
-    )
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
 
     updated_at = Column(
-        DateTime,
-        default=datetime.utcnow,
-        onupdate=datetime.utcnow,
-        nullable=False
+        DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False
     )
 
     def dict(self):
         """Convert model to dictionary."""
         return {
-            column.name: getattr(self, column.name)
-            for column in self.__table__.columns
+            column.name: getattr(self, column.name) for column in self.__table__.columns
         }

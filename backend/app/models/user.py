@@ -1,4 +1,5 @@
 """User database model."""
+
 from sqlalchemy import Boolean, Column, String, Enum
 from sqlalchemy.orm import relationship
 import enum
@@ -8,6 +9,7 @@ from app.db.base import BaseModel
 
 class UserRole(str, enum.Enum):
     """User roles for RBAC."""
+
     USER = "user"
     PRO = "pro"
     BUSINESS = "business"
@@ -31,11 +33,7 @@ class User(BaseModel):
     email_verified = Column(Boolean, default=False, nullable=False)
 
     # Role
-    role = Column(
-        Enum(UserRole),
-        default=UserRole.USER,
-        nullable=False
-    )
+    role = Column(Enum(UserRole), default=UserRole.USER, nullable=False)
 
     # Relationships
     # subscription = relationship("Subscription", back_populates="user", uselist=False)

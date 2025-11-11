@@ -1,4 +1,5 @@
 """Celery tasks for scraping Amazon products."""
+
 from celery import shared_task
 
 

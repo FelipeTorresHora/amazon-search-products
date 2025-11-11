@@ -1,4 +1,5 @@
 """Celery tasks for cleanup and maintenance."""
+
 from celery import shared_task
 
 

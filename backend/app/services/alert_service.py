@@ -1,4 +1,5 @@
 """Alert service - manage product alerts and notifications."""
+
 from typing import List, Optional
 from uuid import UUID
 from datetime import datetime
@@ -17,9 +18,7 @@ class AlertService:
     def __init__(self, db: AsyncSession):
         self.db = db
 
-    async def create_alert(
-        self, user_id: UUID, alert_data: AlertCreate
-    ) -> Alert:
+    async def create_alert(self, user_id: UUID, alert_data: AlertCreate) -> Alert:
         """Create new product alert."""
         # Check if alert already exists
         result = await self.db.execute(
@@ -37,7 +36,7 @@ class AlertService:
         if existing:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Alert already exists for this product"
+                detail="Alert already exists for this product",
             )
 
         # Create alert
@@ -76,12 +75,7 @@ class AlertService:
     async def get_alert(self, alert_id: UUID, user_id: UUID) -> Optional[Alert]:
         """Get specific alert (must belong to user)."""
         result = await self.db.execute(
-            select(Alert).where(
-                and_(
-                    Alert.id == alert_id,
-                    Alert.user_id == user_id
-                )
-            )
+            select(Alert).where(and_(Alert.id == alert_id, Alert.user_id == user_id))
         )
         return result.scalar_one_or_none()
 
@@ -93,8 +87,7 @@ class AlertService:
 
         if not alert:
             raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="Alert not found"
+                status_code=status.HTTP_404_NOT_FOUND, detail="Alert not found"
             )
 
         # Update fields if provided
@@ -127,8 +120,7 @@ class AlertService:
 
         if not alert:
             raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="Alert not found"
+                status_code=status.HTTP_404_NOT_FOUND, detail="Alert not found"
             )
 
         await self.db.delete(alert)
@@ -137,11 +129,7 @@ class AlertService:
         return True
 
     async def trigger_alert(
-        self,
-        alert: Alert,
-        old_value: Optional[float],
-        new_value: float,
-        message: str
+        self, alert: Alert, old_value: Optional[float], new_value: float, message: str
     ):
         """
         Trigger an alert (called by background tasks).
@@ -180,7 +168,5 @@ class AlertService:
 
         Called by Celery task to check for price changes.
         """
-        result = await self.db.execute(
-            select(Alert).where(Alert.is_active == True)
-        )
+        result = await self.db.execute(select(Alert).where(Alert.is_active == True))
         return list(result.scalars().all())

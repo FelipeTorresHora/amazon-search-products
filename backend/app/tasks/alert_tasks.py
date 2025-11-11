@@ -1,4 +1,5 @@
 """Celery tasks for checking and triggering alerts."""
+
 from celery import shared_task
 
 

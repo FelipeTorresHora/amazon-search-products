@@ -1,4 +1,5 @@
 """Subscription database model."""
+
 from sqlalchemy import Column, String, Enum, DateTime, ForeignKey
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
@@ -9,6 +10,7 @@ from app.db.base import BaseModel
 
 class SubscriptionPlan(str, enum.Enum):
     """Available subscription plans."""
+
     FREE = "free"
     PRO = "pro"
     BUSINESS = "business"
@@ -17,6 +19,7 @@ class SubscriptionPlan(str, enum.Enum):
 
 class SubscriptionStatus(str, enum.Enum):
     """Subscription statuses."""
+
     ACTIVE = "active"
     CANCELED = "canceled"
     PAST_DUE = "past_due"
@@ -30,19 +33,15 @@ class Subscription(BaseModel):
     __tablename__ = "subscriptions"
 
     # User relationship
-    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), unique=True, nullable=False)
-
-    # Plan details
-    plan = Column(
-        Enum(SubscriptionPlan),
-        default=SubscriptionPlan.FREE,
-        nullable=False
+    user_id = Column(
+        UUID(as_uuid=True), ForeignKey("users.id"), unique=True, nullable=False
     )
 
+    # Plan details
+    plan = Column(Enum(SubscriptionPlan), default=SubscriptionPlan.FREE, nullable=False)
+
     status = Column(
-        Enum(SubscriptionStatus),
-        default=SubscriptionStatus.ACTIVE,
-        nullable=False
+        Enum(SubscriptionStatus), default=SubscriptionStatus.ACTIVE, nullable=False
     )
 
     # Billing period

@@ -1,4 +1,5 @@
 """Celery tasks for generating and sending reports."""
+
 from celery import shared_task
 
 

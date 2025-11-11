@@ -1,4 +1,5 @@
 """Alert Pydantic schemas."""
+
 from datetime import datetime
 from typing import Optional
 from uuid import UUID
@@ -9,12 +10,13 @@ from pydantic import BaseModel, Field, HttpUrl
 # ALERT SCHEMAS
 # =============================================================================
 
+
 class AlertBase(BaseModel):
     """Base alert schema."""
+
     product_asin: str = Field(..., min_length=10, max_length=10)
     alert_type: str = Field(
-        ...,
-        pattern="^(price_drop|stock_available|new_seller|rating_change)$"
+        ..., pattern="^(price_drop|stock_available|new_seller|rating_change)$"
     )
     threshold_value: Optional[float] = Field(None, description="For price_drop alerts")
     notify_email: bool = True
@@ -24,14 +26,15 @@ class AlertBase(BaseModel):
 
 class AlertCreate(AlertBase):
     """Create new alert."""
+
     pass
 
 
 class AlertUpdate(BaseModel):
     """Update alert."""
+
     alert_type: Optional[str] = Field(
-        None,
-        pattern="^(price_drop|stock_available|new_seller|rating_change)$"
+        None, pattern="^(price_drop|stock_available|new_seller|rating_change)$"
     )
     threshold_value: Optional[float] = None
     is_active: Optional[bool] = None
@@ -42,6 +45,7 @@ class AlertUpdate(BaseModel):
 
 class AlertInDB(AlertBase):
     """Alert as stored in DB."""
+
     id: UUID
     user_id: UUID
     product_title: Optional[str]
@@ -56,11 +60,13 @@ class AlertInDB(AlertBase):
 
 class AlertResponse(AlertInDB):
     """Alert response for API."""
+
     pass
 
 
 class AlertListResponse(BaseModel):
     """List of alerts."""
+
     alerts: list[AlertResponse]
     total: int
     active: int
@@ -71,8 +77,10 @@ class AlertListResponse(BaseModel):
 # ALERT TRIGGERS
 # =============================================================================
 
+
 class AlertTrigger(BaseModel):
     """Alert trigger event."""
+
     alert_id: UUID
     product_asin: str
     product_title: str
@@ -85,6 +93,7 @@ class AlertTrigger(BaseModel):
 
 class AlertHistory(BaseModel):
     """Alert trigger history."""
+
     alert_id: UUID
     triggers: list[AlertTrigger]
     total_triggers: int

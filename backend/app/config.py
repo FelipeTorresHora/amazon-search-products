@@ -2,6 +2,7 @@
 Application configuration management.
 Loads settings from environment variables with validation.
 """
+
 from typing import List, Optional, Any
 from pydantic import Field, field_validator, PostgresDsn
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -13,10 +14,7 @@ class Settings(BaseSettings):
     """Application settings with environment variable loading."""
 
     model_config = SettingsConfigDict(
-        env_file=".env",
-        env_file_encoding="utf-8",
-        case_sensitive=False,
-        extra="ignore"
+        env_file=".env", env_file_encoding="utf-8", case_sensitive=False, extra="ignore"
     )
 
     # =============================================================================
@@ -32,7 +30,9 @@ class Settings(BaseSettings):
     # =============================================================================
     # DATABASE
     # =============================================================================
-    DATABASE_URL: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/amazon_search"
+    DATABASE_URL: str = (
+        "postgresql+asyncpg://postgres:postgres@localhost:5432/amazon_search"
+    )
     DB_POOL_SIZE: int = 20
     DB_MAX_OVERFLOW: int = 0
     DB_ECHO: bool = False
@@ -76,7 +76,7 @@ class Settings(BaseSettings):
     BACKEND_CORS_ORIGINS: List[str] = [
         "http://localhost:8501",
         "http://localhost:3000",
-        "http://localhost:8000"
+        "http://localhost:8000",
     ]
     FRONTEND_URL: str = "http://localhost:8501"
 
@@ -86,6 +86,7 @@ class Settings(BaseSettings):
         """Parse CORS origins from string or list."""
         if isinstance(v, str):
             import json
+
             return json.loads(v)
         return v
 
@@ -313,10 +314,17 @@ if __name__ == "__main__":
 
     # Mask sensitive values
     sensitive_keys = [
-        "SECRET_KEY", "JWT_SECRET_KEY", "DATABASE_URL", "REDIS_URL",
-        "RAPIDAPI_KEY", "STRIPE_SECRET_KEY", "STRIPE_WEBHOOK_SECRET",
-        "SENDGRID_API_KEY", "AWS_SECRET_ACCESS_KEY", "SENTRY_DSN",
-        "FIRST_SUPERUSER_PASSWORD"
+        "SECRET_KEY",
+        "JWT_SECRET_KEY",
+        "DATABASE_URL",
+        "REDIS_URL",
+        "RAPIDAPI_KEY",
+        "STRIPE_SECRET_KEY",
+        "STRIPE_WEBHOOK_SECRET",
+        "SENDGRID_API_KEY",
+        "AWS_SECRET_ACCESS_KEY",
+        "SENTRY_DSN",
+        "FIRST_SUPERUSER_PASSWORD",
     ]
 
     for key in sensitive_keys:

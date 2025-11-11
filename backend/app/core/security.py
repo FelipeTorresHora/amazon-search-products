@@ -1,6 +1,7 @@
 """
 Security utilities: password hashing, JWT tokens, authentication.
 """
+
 from datetime import datetime, timedelta
 from typing import Any, Optional, Dict
 import secrets
@@ -21,14 +22,13 @@ from app.models.user import User
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 # OAuth2 scheme for token authentication
-oauth2_scheme = OAuth2PasswordBearer(
-    tokenUrl=f"{settings.API_V1_PREFIX}/auth/login"
-)
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"{settings.API_V1_PREFIX}/auth/login")
 
 
 # =============================================================================
 # PASSWORD HASHING
 # =============================================================================
+
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """Verify a password against a hash."""
@@ -48,7 +48,10 @@ def validate_password(password: str) -> tuple[bool, Optional[str]]:
         (is_valid, error_message)
     """
     if len(password) < settings.PASSWORD_MIN_LENGTH:
-        return False, f"Password must be at least {settings.PASSWORD_MIN_LENGTH} characters"
+        return (
+            False,
+            f"Password must be at least {settings.PASSWORD_MIN_LENGTH} characters",
+        )
 
     if settings.PASSWORD_REQUIRE_UPPERCASE and not any(c.isupper() for c in password):
         return False, "Password must contain at least one uppercase letter"
@@ -71,9 +74,9 @@ def validate_password(password: str) -> tuple[bool, Optional[str]]:
 # JWT TOKENS
 # =============================================================================
 
+
 def create_access_token(
-    data: Dict[str, Any],
-    expires_delta: Optional[timedelta] = None
+    data: Dict[str, Any], expires_delta: Optional[timedelta] = None
 ) -> str:
     """
     Create a JWT access token.
@@ -94,16 +97,10 @@ def create_access_token(
             minutes=settings.JWT_ACCESS_TOKEN_EXPIRE_MINUTES
         )
 
-    to_encode.update({
-        "exp": expire,
-        "iat": datetime.utcnow(),
-        "type": "access"
-    })
+    to_encode.update({"exp": expire, "iat": datetime.utcnow(), "type": "access"})
 
     encoded_jwt = jwt.encode(
-        to_encode,
-        settings.JWT_SECRET_KEY,
-        algorithm=settings.JWT_ALGORITHM
+        to_encode, settings.JWT_SECRET_KEY, algorithm=settings.JWT_ALGORITHM
     )
 
     return encoded_jwt
@@ -122,16 +119,10 @@ def create_refresh_token(data: Dict[str, Any]) -> str:
     to_encode = data.copy()
     expire = datetime.utcnow() + timedelta(days=settings.JWT_REFRESH_TOKEN_EXPIRE_DAYS)
 
-    to_encode.update({
-        "exp": expire,
-        "iat": datetime.utcnow(),
-        "type": "refresh"
-    })
+    to_encode.update({"exp": expire, "iat": datetime.utcnow(), "type": "refresh"})
 
     encoded_jwt = jwt.encode(
-        to_encode,
-        settings.JWT_SECRET_KEY,
-        algorithm=settings.JWT_ALGORITHM
+        to_encode, settings.JWT_SECRET_KEY, algorithm=settings.JWT_ALGORITHM
     )
 
     return encoded_jwt
@@ -152,9 +143,7 @@ def decode_token(token: str) -> Dict[str, Any]:
     """
     try:
         payload = jwt.decode(
-            token,
-            settings.JWT_SECRET_KEY,
-            algorithms=[settings.JWT_ALGORITHM]
+            token, settings.JWT_SECRET_KEY, algorithms=[settings.JWT_ALGORITHM]
         )
         return payload
     except JWTError as e:
@@ -174,9 +163,9 @@ def generate_api_key() -> str:
 # AUTHENTICATION DEPENDENCIES
 # =============================================================================
 
+
 async def get_current_user(
-    token: str = Depends(oauth2_scheme),
-    db: AsyncSession = Depends(get_db)
+    token: str = Depends(oauth2_scheme), db: AsyncSession = Depends(get_db)
 ) -> User:
     """
     Get current authenticated user from JWT token.
@@ -207,9 +196,7 @@ async def get_current_user(
         raise credentials_exception
 
     # Get user from database
-    result = await db.execute(
-        select(User).where(User.id == user_id)
-    )
+    result = await db.execute(select(User).where(User.id == user_id))
     user = result.scalar_one_or_none()
 
     if user is None:
@@ -217,33 +204,29 @@ async def get_current_user(
 
     if not user.is_active:
         raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Inactive user"
+            status_code=status.HTTP_403_FORBIDDEN, detail="Inactive user"
         )
 
     return user
 
 
 async def get_current_active_user(
-    current_user: User = Depends(get_current_user)
+    current_user: User = Depends(get_current_user),
 ) -> User:
     """Get current active user (email must be verified)."""
     if not current_user.email_verified:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
-            detail="Email not verified. Please verify your email."
+            detail="Email not verified. Please verify your email.",
         )
     return current_user
 
 
-async def get_current_superuser(
-    current_user: User = Depends(get_current_user)
-) -> User:
+async def get_current_superuser(current_user: User = Depends(get_current_user)) -> User:
     """Get current user if they are a superuser."""
     if not current_user.is_superuser:
         raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Not enough permissions"
+            status_code=status.HTTP_403_FORBIDDEN, detail="Not enough permissions"
         )
     return current_user
 
@@ -259,12 +242,7 @@ def check_user_plan(required_plan: str):
         ):
             return {"api_key": user.subscription.api_key}
     """
-    plan_hierarchy = {
-        "free": 0,
-        "pro": 1,
-        "business": 2,
-        "enterprise": 3
-    }
+    plan_hierarchy = {"free": 0, "pro": 1, "business": 2, "enterprise": 3}
 
     async def dependency(current_user: User = Depends(get_current_active_user)):
         user_plan_level = plan_hierarchy.get(current_user.role.value, 0)
@@ -273,7 +251,7 @@ def check_user_plan(required_plan: str):
         if user_plan_level < required_plan_level:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
-                detail=f"This feature requires {required_plan.upper()} plan or higher"
+                detail=f"This feature requires {required_plan.upper()} plan or higher",
             )
 
         return current_user

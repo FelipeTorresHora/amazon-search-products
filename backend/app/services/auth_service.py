@@ -1,4 +1,5 @@
 """Authentication service - handles user registration, login, tokens."""
+
 from typing import Optional, Tuple
 from datetime import datetime, timedelta
 import secrets
@@ -43,7 +44,7 @@ class AuthService:
         if existing_user:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Email already registered"
+                detail="Email already registered",
             )
 
         # Create user
@@ -81,18 +82,14 @@ class AuthService:
 
         return user, access_token, refresh_token
 
-    async def authenticate_user(
-        self, email: str, password: str
-    ) -> Optional[User]:
+    async def authenticate_user(self, email: str, password: str) -> Optional[User]:
         """
         Authenticate user with email and password.
 
         Returns:
             User if authentication successful, None otherwise
         """
-        result = await self.db.execute(
-            select(User).where(User.email == email)
-        )
+        result = await self.db.execute(select(User).where(User.email == email))
         user = result.scalar_one_or_none()
 
         if not user:
@@ -133,16 +130,12 @@ class AuthService:
 
     async def get_user_by_id(self, user_id: str) -> Optional[User]:
         """Get user by ID."""
-        result = await self.db.execute(
-            select(User).where(User.id == user_id)
-        )
+        result = await self.db.execute(select(User).where(User.id == user_id))
         return result.scalar_one_or_none()
 
     async def get_user_by_email(self, email: str) -> Optional[User]:
         """Get user by email."""
-        result = await self.db.execute(
-            select(User).where(User.email == email)
-        )
+        result = await self.db.execute(select(User).where(User.email == email))
         return result.scalar_one_or_none()
 
     async def verify_email(self, user_id: str) -> User:
@@ -155,8 +148,7 @@ class AuthService:
 
         if not user:
             raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="User not found"
+                status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
             )
 
         user.email_verified = True
@@ -186,9 +178,7 @@ class AuthService:
 
         return reset_token
 
-    async def reset_password(
-        self, user_id: str, new_password: str
-    ) -> User:
+    async def reset_password(self, user_id: str, new_password: str) -> User:
         """
         Reset user password.
 
@@ -198,8 +188,7 @@ class AuthService:
 
         if not user:
             raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="User not found"
+                status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
             )
 
         user.password_hash = get_password_hash(new_password)
@@ -209,25 +198,21 @@ class AuthService:
         return user
 
     async def change_password(
-        self,
-        user_id: str,
-        current_password: str,
-        new_password: str
+        self, user_id: str, current_password: str, new_password: str
     ) -> User:
         """Change user password (requires current password)."""
         user = await self.get_user_by_id(user_id)
 
         if not user:
             raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="User not found"
+                status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
             )
 
         # Verify current password
         if not verify_password(current_password, user.password_hash):
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Incorrect current password"
+                detail="Incorrect current password",
             )
 
         # Update password
@@ -237,16 +222,13 @@ class AuthService:
 
         return user
 
-    async def create_superuser(
-        self, email: str, password: str, full_name: str
-    ) -> User:
+    async def create_superuser(self, email: str, password: str, full_name: str) -> User:
         """Create a superuser (admin)."""
         # Check if exists
         existing = await self.get_user_by_email(email)
         if existing:
             raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="User already exists"
+                status_code=status.HTTP_400_BAD_REQUEST, detail="User already exists"
             )
 
         user = User(

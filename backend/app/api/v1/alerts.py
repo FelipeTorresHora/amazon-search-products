@@ -1,4 +1,5 @@
 """Price and stock alerts API endpoints."""
+
 from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -23,7 +24,7 @@ router = APIRouter()
 async def list_alerts(
     active_only: bool = True,
     current_user: User = Depends(get_current_active_user),
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
 ):
     """List user's active alerts."""
     alert_service = AlertService(db)
@@ -35,7 +36,7 @@ async def list_alerts(
         alerts=alerts,
         total=len(alerts),
         active=active_count,
-        inactive=len(alerts) - active_count
+        inactive=len(alerts) - active_count,
     )
 
 
@@ -43,7 +44,7 @@ async def list_alerts(
 async def create_alert(
     alert_data: AlertCreate,
     current_user: User = Depends(get_current_active_user),
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
 ):
     """
     Create new price/stock alert.
@@ -52,14 +53,12 @@ async def create_alert(
     """
     # Check alert quota
     subscription_service = SubscriptionService(db)
-    can_create = await subscription_service.increment_usage(
-        current_user.id, "alerts"
-    )
+    can_create = await subscription_service.increment_usage(current_user.id, "alerts")
 
     if not can_create:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
-            detail="Alert quota exceeded. Please upgrade your plan."
+            detail="Alert quota exceeded. Please upgrade your plan.",
         )
 
     alert_service = AlertService(db)
@@ -72,7 +71,7 @@ async def create_alert(
 async def get_alert(
     alert_id: UUID,
     current_user: User = Depends(get_current_active_user),
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
 ):
     """Get alert details."""
     alert_service = AlertService(db)
@@ -80,8 +79,7 @@ async def get_alert(
 
     if not alert:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Alert not found"
+            status_code=status.HTTP_404_NOT_FOUND, detail="Alert not found"
         )
 
     return alert
@@ -92,7 +90,7 @@ async def update_alert(
     alert_id: UUID,
     alert_data: AlertUpdate,
     current_user: User = Depends(get_current_active_user),
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
 ):
     """Update alert configuration."""
     alert_service = AlertService(db)
@@ -105,7 +103,7 @@ async def update_alert(
 async def delete_alert(
     alert_id: UUID,
     current_user: User = Depends(get_current_active_user),
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
 ):
     """Delete alert."""
     alert_service = AlertService(db)

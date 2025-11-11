@@ -1,4 +1,5 @@
 """Subscription Pydantic schemas."""
+
 from datetime import datetime
 from typing import Optional
 from uuid import UUID
@@ -9,27 +10,31 @@ from pydantic import BaseModel, Field
 # SUBSCRIPTION SCHEMAS
 # =============================================================================
 
+
 class SubscriptionBase(BaseModel):
     """Base subscription schema."""
+
     plan: str = Field(..., pattern="^(free|pro|business|enterprise)$")
 
 
 class SubscriptionCreate(SubscriptionBase):
     """Create subscription."""
+
     user_id: UUID
 
 
 class SubscriptionUpdate(BaseModel):
     """Update subscription."""
+
     plan: Optional[str] = Field(None, pattern="^(free|pro|business|enterprise)$")
     status: Optional[str] = Field(
-        None,
-        pattern="^(active|canceled|past_due|trialing|incomplete)$"
+        None, pattern="^(active|canceled|past_due|trialing|incomplete)$"
     )
 
 
 class SubscriptionInDB(SubscriptionBase):
     """Subscription as stored in DB."""
+
     id: UUID
     user_id: UUID
     status: str
@@ -47,11 +52,13 @@ class SubscriptionInDB(SubscriptionBase):
 
 class SubscriptionResponse(SubscriptionInDB):
     """Subscription response for API."""
+
     api_key: Optional[str] = None  # Only for Business+
 
 
 class UsageStats(BaseModel):
     """Usage statistics for current billing period."""
+
     plan: str
     status: str
     searches_used: int
@@ -69,8 +76,10 @@ class UsageStats(BaseModel):
 # SUBSCRIPTION PLANS
 # =============================================================================
 
+
 class PlanFeatures(BaseModel):
     """Features included in a plan."""
+
     searches_per_month: int
     alerts_limit: int
     api_access: bool
@@ -83,6 +92,7 @@ class PlanFeatures(BaseModel):
 
 class SubscriptionPlan(BaseModel):
     """Subscription plan details."""
+
     id: str
     name: str
     price: float
@@ -95,6 +105,7 @@ class SubscriptionPlan(BaseModel):
 
 class PlanListResponse(BaseModel):
     """List of available plans."""
+
     plans: list[SubscriptionPlan]
 
 
@@ -102,8 +113,10 @@ class PlanListResponse(BaseModel):
 # STRIPE CHECKOUT
 # =============================================================================
 
+
 class CheckoutSessionCreate(BaseModel):
     """Create Stripe checkout session."""
+
     plan: str = Field(..., pattern="^(pro|business|enterprise)$")
     success_url: Optional[str] = None
     cancel_url: Optional[str] = None
@@ -111,12 +124,14 @@ class CheckoutSessionCreate(BaseModel):
 
 class CheckoutSessionResponse(BaseModel):
     """Checkout session response."""
+
     session_id: str
     checkout_url: str
 
 
 class CustomerPortalResponse(BaseModel):
     """Customer portal response."""
+
     portal_url: str
 
 
@@ -124,7 +139,9 @@ class CustomerPortalResponse(BaseModel):
 # STRIPE WEBHOOKS
 # =============================================================================
 
+
 class StripeWebhookEvent(BaseModel):
     """Stripe webhook event."""
+
     type: str
     data: dict

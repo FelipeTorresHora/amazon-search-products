@@ -1,4 +1,5 @@
 """Alert database model."""
+
 from sqlalchemy import Column, String, Enum, Boolean, Float, DateTime, ForeignKey
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
@@ -9,6 +10,7 @@ from app.db.base import BaseModel
 
 class AlertType(str, enum.Enum):
     """Types of alerts."""
+
     PRICE_DROP = "price_drop"
     STOCK_AVAILABLE = "stock_available"
     NEW_SELLER = "new_seller"

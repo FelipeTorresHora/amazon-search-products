@@ -1,4 +1,5 @@
 """Subscription and billing API endpoints."""
+
 from fastapi import APIRouter, Depends, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -30,8 +31,8 @@ async def list_plans():
                     "searches_per_month": 50,
                     "alerts_limit": 5,
                     "api_access": False,
-                    "support": "Community"
-                }
+                    "support": "Community",
+                },
             },
             {
                 "id": "pro",
@@ -42,9 +43,9 @@ async def list_plans():
                     "searches_per_month": 1000,
                     "alerts_limit": 50,
                     "api_access": False,
-                    "support": "Email (48h)"
+                    "support": "Email (48h)",
                 },
-                "is_popular": True
+                "is_popular": True,
             },
             {
                 "id": "business",
@@ -55,8 +56,8 @@ async def list_plans():
                     "searches_per_month": 5000,
                     "alerts_limit": 200,
                     "api_access": True,
-                    "support": "Email (24h)"
-                }
+                    "support": "Email (24h)",
+                },
             },
             {
                 "id": "enterprise",
@@ -67,9 +68,9 @@ async def list_plans():
                     "searches_per_month": "unlimited",
                     "alerts_limit": "unlimited",
                     "api_access": True,
-                    "support": "Phone (4h)"
-                }
-            }
+                    "support": "Phone (4h)",
+                },
+            },
         ]
     }
 
@@ -78,7 +79,7 @@ async def list_plans():
 async def create_checkout_session(
     checkout_data: CheckoutSessionCreate,
     current_user: User = Depends(get_current_active_user),
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
 ):
     """
     Create Stripe checkout session.
@@ -90,7 +91,7 @@ async def create_checkout_session(
         current_user.id,
         checkout_data.plan,
         checkout_data.success_url,
-        checkout_data.cancel_url
+        checkout_data.cancel_url,
     )
 
     return CheckoutSessionResponse(**session)
@@ -99,7 +100,7 @@ async def create_checkout_session(
 @router.post("/portal", response_model=CustomerPortalResponse)
 async def customer_portal(
     current_user: User = Depends(get_current_active_user),
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
 ):
     """
     Create Stripe customer portal session.
@@ -115,7 +116,7 @@ async def customer_portal(
 @router.get("/usage", response_model=UsageStats)
 async def get_usage(
     current_user: User = Depends(get_current_active_user),
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
 ):
     """Get current usage statistics for billing period."""
     subscription_service = SubscriptionService(db)
@@ -136,6 +137,7 @@ async def stripe_webhook(request: Request, db: AsyncSession = Depends(get_db)):
     # TODO: Verify webhook signature with Stripe
 
     import json
+
     event = json.loads(payload)
 
     subscription_service = SubscriptionService(db)

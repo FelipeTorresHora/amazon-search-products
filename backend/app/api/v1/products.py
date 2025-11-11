@@ -1,4 +1,5 @@
 """Product search and analysis API endpoints."""
+
 from fastapi import APIRouter, Query, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -30,7 +31,7 @@ async def search_products(
     page: int = Query(1, ge=1, description="Page number"),
     per_page: int = Query(20, ge=1, le=100, description="Items per page"),
     current_user: User = Depends(get_current_active_user),
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
 ):
     """
     Search Amazon products with filters.
@@ -39,15 +40,14 @@ async def search_products(
     """
     # Check usage quota
     subscription_service = SubscriptionService(db)
-    can_search = await subscription_service.increment_usage(
-        current_user.id, "searches"
-    )
+    can_search = await subscription_service.increment_usage(current_user.id, "searches")
 
     if not can_search:
         from fastapi import HTTPException, status
+
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
-            detail="Search quota exceeded. Please upgrade your plan."
+            detail="Search quota exceeded. Please upgrade your plan.",
         )
 
     # Build filters
@@ -60,7 +60,7 @@ async def search_products(
         is_prime=is_prime,
         sort_by=sort_by,
         page=page,
-        per_page=per_page
+        per_page=per_page,
     )
 
     # Search products
@@ -71,19 +71,16 @@ async def search_products(
 
 
 @router.get("/{asin}", response_model=ProductDetail)
-async def get_product(
-    asin: str,
-    current_user: User = Depends(get_current_active_user)
-):
+async def get_product(asin: str, current_user: User = Depends(get_current_active_user)):
     """Get product details by ASIN."""
     product_service = ProductService()
     product = await product_service.get_product_detail(asin)
 
     if not product:
         from fastapi import HTTPException, status
+
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Product {asin} not found"
+            status_code=status.HTTP_404_NOT_FOUND, detail=f"Product {asin} not found"
         )
 
     return product
@@ -91,8 +88,7 @@ async def get_product(
 
 @router.get("/{asin}/history")
 async def get_product_history(
-    asin: str,
-    current_user: User = Depends(get_current_active_user)
+    asin: str, current_user: User = Depends(get_current_active_user)
 ):
     """Get price and rating history for a product."""
     product_service = ProductService()
@@ -104,7 +100,7 @@ async def get_product_history(
 @router.post("/bulk-search", response_model=BulkSearchResponse)
 async def bulk_search(
     request: BulkSearchRequest,
-    current_user: User = Depends(check_user_plan("business"))
+    current_user: User = Depends(check_user_plan("business")),
 ):
     """
     Search multiple products at once.
@@ -112,8 +108,4 @@ async def bulk_search(
     Requires: Business+ plan
     """
     # TODO: Implement bulk search
-    return BulkSearchResponse(
-        products=[],
-        found=0,
-        not_found=request.asins
-    )
+    return BulkSearchResponse(products=[], found=0, not_found=request.asins)

@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amazon Search Products - Inteligência de Mercado AI</title>
+    <link rel="stylesheet" href="landing.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Canvas de Partículas -->
+    <canvas id="particles"></canvas>
+
+    <!-- Navbar Futurista -->
+    <nav class="navbar" id="navbar">
+        <div class="container nav-container">
+            <div class="logo">
+                <div class="logo-icon">
+                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                        <path d="M20 0L30 10L20 20L10 10L20 0Z" fill="url(#gradient1)"/>
+                        <path d="M0 20L10 30L20 20L10 10L0 20Z" fill="url(#gradient2)"/>
+                        <path d="M20 20L30 30L20 40L10 30L20 20Z" fill="url(#gradient3)"/>
+                        <path d="M20 20L30 10L40 20L30 30L20 20Z" fill="url(#gradient4)"/>
+                        <defs>
+                            <linearGradient id="gradient1" x1="10" y1="0" x2="30" y2="20">
+                                <stop offset="0%" stop-color="#667eea"/>
+                                <stop offset="100%" stop-color="#764ba2"/>
+                            </linearGradient>
+                            <linearGradient id="gradient2" x1="0" y1="10" x2="20" y2="30">
+                                <stop offset="0%" stop-color="#f093fb"/>
+                                <stop offset="100%" stop-color="#f5576c"/>
+                            </linearGradient>
+                            <linearGradient id="gradient3" x1="10" y1="20" x2="30" y2="40">
+                                <stop offset="0%" stop-color="#4facfe"/>
+                                <stop offset="100%" stop-color="#00f2fe"/>
+                            </linearGradient>
+                            <linearGradient id="gradient4" x1="20" y1="10" x2="40" y2="30">
+                                <stop offset="0%" stop-color="#43e97b"/>
+                                <stop offset="100%" stop-color="#38f9d7"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <span class="logo-text">Amazon<span class="highlight">AI</span></span>
+            </div>
+
+            <div class="nav-links">
+                <a href="#features" class="nav-link">Features</a>
+                <a href="#pricing" class="nav-link">Preços</a>
+                <a href="#demo" class="nav-link">Demo</a>
+                <a href="#contact" class="nav-link">Contato</a>
+            </div>
+
+            <div class="nav-actions">
+                <a href="/login" class="btn-secondary">Login</a>
+                <a href="/register" class="btn-primary">
+                    Começar Grátis
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M6 3L11 8L6 13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </a>
+            </div>
+
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section com 3D -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <span class="badge-dot"></span>
+                    <span>Powered by AI & Real-Time Data</span>
+                </div>
+
+                <h1 class="hero-title">
+                    Inteligência de Mercado
+                    <span class="gradient-text">Em Tempo Real</span>
+                    <br>para Amazon Brasil
+                </h1>
+
+                <p class="hero-description">
+                    Encontre os produtos mais lucrativos, analise a concorrência e
+                    maximize seus lucros com nossa plataforma de análise de dados em tempo real.
+                </p>
+
+                <div class="hero-cta">
+                    <a href="/register" class="btn-hero">
+                        Começar Gratuitamente
+                        <span class="btn-glow"></span>
+                    </a>
+                    <a href="#demo" class="btn-demo">
+                        <div class="play-icon">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M5 3L16 10L5 17V3Z" fill="currentColor"/>
+                            </svg>
+                        </div>
+                        Ver Demo
+                    </a>
+                </div>
+
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <div class="stat-number" data-target="10000">0</div>
+                        <div class="stat-label">Produtos Analisados</div>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item">
+                        <div class="stat-number" data-target="500">0</div>
+                        <div class="stat-label">Usuários Ativos</div>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item">
+                        <div class="stat-number" data-target="98">0</div>
+                        <div class="stat-label">% Satisfação</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-visual">
+                <div class="floating-card card-1">
+                    <div class="card-icon">📊</div>
+                    <div class="card-content">
+                        <div class="card-title">+234%</div>
+                        <div class="card-subtitle">ROI Médio</div>
+                    </div>
+                    <div class="card-sparkline"></div>
+                </div>
+
+                <div class="floating-card card-2">
+                    <div class="card-icon">🎯</div>
+                    <div class="card-content">
+                        <div class="card-title">2.3k</div>
+                        <div class="card-subtitle">Alertas Ativos</div>
+                    </div>
+                </div>
+
+                <div class="floating-card card-3">
+                    <div class="card-icon">⚡</div>
+                    <div class="card-content">
+                        <div class="card-title">Real-Time</div>
+                        <div class="card-subtitle">Atualizações</div>
+                    </div>
+                    <div class="pulse-indicator"></div>
+                </div>
+
+                <div class="sphere-3d"></div>
+            </div>
+        </div>
+
+        <div class="scroll-indicator">
+            <div class="mouse">
+                <div class="wheel"></div>
+            </div>
+            <span>Scroll para explorar</span>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Features</span>
+                <h2 class="section-title">
+                    Tudo que você precisa para
+                    <span class="gradient-text">dominar o mercado</span>
+                </h2>
+                <p class="section-description">
+                    Ferramentas poderosas de análise e automação para empreendedores digitais
+                </p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card" data-tilt>
+                    <div class="feature-icon">
+                        <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                            <rect width="40" height="40" rx="12" fill="url(#gradient-search)"/>
+                            <path d="M17 11C13.686 11 11 13.686 11 17C11 20.314 13.686 23 17 23C18.346 23 19.596 22.536 20.596 21.767L27.414 28.586C27.789 28.961 28.398 28.961 28.773 28.586C29.148 28.211 29.148 27.602 28.773 27.227L21.955 20.409C22.724 19.409 23.188 18.159 23.188 16.813C23.188 13.499 20.502 10.813 17.188 10.813L17 11ZM17 13C19.209 13 21 14.791 21 17C21 19.209 19.209 21 17 21C14.791 21 13 19.209 13 17C13 14.791 14.791 13 17 13Z" fill="white"/>
+                            <defs>
+                                <linearGradient id="gradient-search">
+                                    <stop offset="0%" stop-color="#667eea"/>
+                                    <stop offset="100%" stop-color="#764ba2"/>
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Busca Inteligente</h3>
+                    <p class="feature-description">
+                        Encontre produtos vencedores com filtros avançados por categoria, preço, rating e mais
+                    </p>
+                    <ul class="feature-list">
+                        <li>• Filtros avançados por categoria</li>
+                        <li>• Análise de competitividade</li>
+                        <li>• Identificação de tendências</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card" data-tilt>
+                    <div class="feature-icon">
+                        <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                            <rect width="40" height="40" rx="12" fill="url(#gradient-alert)"/>
+                            <path d="M20 10L22.5 17.5H30L23.75 22.5L26.25 30L20 25L13.75 30L16.25 22.5L10 17.5H17.5L20 10Z" fill="white"/>
+                            <defs>
+                                <linearGradient id="gradient-alert">
+                                    <stop offset="0%" stop-color="#f093fb"/>
+                                    <stop offset="100%" stop-color="#f5576c"/>
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Alertas em Tempo Real</h3>
+                    <p class="feature-description">
+                        Receba notificações instantâneas de mudanças de preço, estoque e oportunidades
+                    </p>
+                    <ul class="feature-list">
+                        <li>• Alertas de queda de preço</li>
+                        <li>• Monitoramento de estoque</li>
+                        <li>• Webhooks customizáveis</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card" data-tilt>
+                    <div class="feature-icon">
+                        <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                            <rect width="40" height="40" rx="12" fill="url(#gradient-analytics)"/>
+                            <path d="M12 28V18H16V28H12ZM18 28V12H22V28H18ZM24 28V22H28V28H24Z" fill="white"/>
+                            <defs>
+                                <linearGradient id="gradient-analytics">
+                                    <stop offset="0%" stop-color="#4facfe"/>
+                                    <stop offset="100%" stop-color="#00f2fe"/>
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Analytics Avançado</h3>
+                    <p class="feature-description">
+                        Dashboard completo com insights acionáveis e visualizações interativas
+                    </p>
+                    <ul class="feature-list">
+                        <li>• Histórico de preços</li>
+                        <li>• Análise de tendências</li>
+                        <li>• Relatórios exportáveis</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card" data-tilt>
+                    <div class="feature-icon">
+                        <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                            <rect width="40" height="40" rx="12" fill="url(#gradient-api)"/>
+                            <path d="M15 12H25C26.1 12 27 12.9 27 14V26C27 27.1 26.1 28 25 28H15C13.9 28 13 27.1 13 26V14C13 12.9 13.9 12 15 12Z" fill="white"/>
+                            <path d="M17 16H23M17 20H23M17 24H20" stroke="#4facfe" stroke-width="2" stroke-linecap="round"/>
+                            <defs>
+                                <linearGradient id="gradient-api">
+                                    <stop offset="0%" stop-color="#43e97b"/>
+                                    <stop offset="100%" stop-color="#38f9d7"/>
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">API Completa</h3>
+                    <p class="feature-description">
+                        Integre com suas ferramentas favoritas usando nossa API RESTful
+                    </p>
+                    <ul class="feature-list">
+                        <li>• Documentação completa</li>
+                        <li>• Rate limiting flexível</li>
+                        <li>• Webhooks em tempo real</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="pricing" id="pricing">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Preços</span>
+                <h2 class="section-title">
+                    Planos para todos os
+                    <span class="gradient-text">tamanhos de negócio</span>
+                </h2>
+                <p class="section-description">
+                    Comece grátis e escale conforme cresce
+                </p>
+            </div>
+
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <div class="pricing-header">
+                        <h3 class="pricing-name">Free</h3>
+                        <div class="pricing-price">
+                            <span class="currency">R$</span>
+                            <span class="amount">0</span>
+                            <span class="period">/mês</span>
+                        </div>
+                        <p class="pricing-description">Perfeito para começar</p>
+                    </div>
+                    <ul class="pricing-features">
+                        <li class="feature-included">50 buscas/mês</li>
+                        <li class="feature-included">5 alertas</li>
+                        <li class="feature-included">2 categorias</li>
+                        <li class="feature-included">Histórico 30 dias</li>
+                        <li class="feature-excluded">API access</li>
+                        <li class="feature-excluded">Suporte prioritário</li>
+                    </ul>
+                    <a href="/register?plan=free" class="pricing-btn btn-outline">Começar Grátis</a>
+                </div>
+
+                <div class="pricing-card featured">
+                    <div class="popular-badge">Mais Popular</div>
+                    <div class="pricing-header">
+                        <h3 class="pricing-name">Pro</h3>
+                        <div class="pricing-price">
+                            <span class="currency">R$</span>
+                            <span class="amount">97</span>
+                            <span class="period">/mês</span>
+                        </div>
+                        <p class="pricing-description">Para empreendedores sérios</p>
+                    </div>
+                    <ul class="pricing-features">
+                        <li class="feature-included">1.000 buscas/mês</li>
+                        <li class="feature-included">50 alertas</li>
+                        <li class="feature-included">Todas categorias</li>
+                        <li class="feature-included">Histórico 6 meses</li>
+                        <li class="feature-included">Exportação CSV</li>
+                        <li class="feature-included">Suporte email (48h)</li>
+                    </ul>
+                    <a href="/register?plan=pro" class="pricing-btn btn-primary">Escolher Pro</a>
+                </div>
+
+                <div class="pricing-card">
+                    <div class="pricing-header">
+                        <h3 class="pricing-name">Business</h3>
+                        <div class="pricing-price">
+                            <span class="currency">R$</span>
+                            <span class="amount">297</span>
+                            <span class="period">/mês</span>
+                        </div>
+                        <p class="pricing-description">Máxima performance</p>
+                    </div>
+                    <ul class="pricing-features">
+                        <li class="feature-included">5.000 buscas/mês</li>
+                        <li class="feature-included">200 alertas</li>
+                        <li class="feature-included">API completa</li>
+                        <li class="feature-included">Histórico ilimitado</li>
+                        <li class="feature-included">Webhooks</li>
+                        <li class="feature-included">Suporte prioritário (24h)</li>
+                    </ul>
+                    <a href="/register?plan=business" class="pricing-btn btn-outline">Escolher Business</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="container">
+            <div class="cta-content">
+                <h2 class="cta-title">
+                    Pronto para <span class="gradient-text">10x seu negócio</span>?
+                </h2>
+                <p class="cta-description">
+                    Junte-se a centenas de empreendedores que já estão lucrando mais com nossa plataforma
+                </p>
+                <div class="cta-actions">
+                    <a href="/register" class="btn-hero">
+                        Começar Gratuitamente
+                        <span class="btn-glow"></span>
+                    </a>
+                    <span class="cta-note">• Sem cartão de crédito • Cancele quando quiser</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="logo">
+                        <div class="logo-icon">
+                            <svg width="32" height="32" viewBox="0 0 40 40" fill="none">
+                                <path d="M20 0L30 10L20 20L10 10L20 0Z" fill="url(#gradient1)"/>
+                                <path d="M0 20L10 30L20 20L10 10L0 20Z" fill="url(#gradient2)"/>
+                                <path d="M20 20L30 30L20 40L10 30L20 20Z" fill="url(#gradient3)"/>
+                                <path d="M20 20L30 10L40 20L30 30L20 20Z" fill="url(#gradient4)"/>
+                            </svg>
+                        </div>
+                        <span class="logo-text">Amazon<span class="highlight">AI</span></span>
+                    </div>
+                    <p class="footer-description">
+                        Inteligência de mercado em tempo real para Amazon Brasil
+                    </p>
+                </div>
+
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Produto</h4>
+                        <a href="#features">Features</a>
+                        <a href="#pricing">Preços</a>
+                        <a href="/docs">Documentação</a>
+                        <a href="/api">API</a>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Empresa</h4>
+                        <a href="/about">Sobre</a>
+                        <a href="/blog">Blog</a>
+                        <a href="/careers">Carreiras</a>
+                        <a href="/contact">Contato</a>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Legal</h4>
+                        <a href="/privacy">Privacidade</a>
+                        <a href="/terms">Termos</a>
+                        <a href="/security">Segurança</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2025 AmazonAI. Todos os direitos reservados.</p>
+                <div class="footer-social">
+                    <a href="#" class="social-link">Twitter</a>
+                    <a href="#" class="social-link">LinkedIn</a>
+                    <a href="#" class="social-link">GitHub</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="landing.js"></script>
+</body>
+</html>
