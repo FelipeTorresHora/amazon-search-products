@@ -1,8 +1,8 @@
 """User database model."""
 
-from sqlalchemy import Boolean, Column, String, Enum
-from sqlalchemy.orm import relationship
 import enum
+
+from sqlalchemy import Boolean, Column, Enum, String
 
 from app.db.base import BaseModel
 

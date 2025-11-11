@@ -2,21 +2,20 @@
 Security utilities: password hashing, JWT tokens, authentication.
 """
 
-from datetime import datetime, timedelta
-from typing import Any, Optional, Dict
 import secrets
+from datetime import datetime, timedelta
+from typing import Any, Dict, Optional
 
-from passlib.context import CryptContext
-from jose import jwt, JWTError
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
-from sqlalchemy.ext.asyncio import AsyncSession
+from jose import JWTError, jwt
+from passlib.context import CryptContext
 from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import settings
 from app.db.session import get_db
 from app.models.user import User
-
 
 # Password hashing context
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")

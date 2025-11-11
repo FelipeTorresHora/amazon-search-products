@@ -3,8 +3,8 @@
 from datetime import datetime
 from typing import Optional
 from uuid import UUID
-from pydantic import BaseModel, Field, HttpUrl
 
+from pydantic import BaseModel, Field, HttpUrl
 
 # =============================================================================
 # ALERT SCHEMAS

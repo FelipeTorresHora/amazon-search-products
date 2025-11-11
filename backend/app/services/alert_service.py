@@ -1,12 +1,12 @@
 """Alert service - manage product alerts and notifications."""
 
+from datetime import datetime
 from typing import List, Optional
 from uuid import UUID
-from datetime import datetime
 
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, and_
 from fastapi import HTTPException, status
+from sqlalchemy import and_, select
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.alert import Alert, AlertType
 from app.schemas.alert import AlertCreate, AlertUpdate
@@ -27,7 +27,7 @@ class AlertService:
                     Alert.user_id == user_id,
                     Alert.product_asin == alert_data.product_asin,
                     Alert.alert_type == AlertType(alert_data.alert_type),
-                    Alert.is_active == True,
+                    Alert.is_active.is_(True),
                 )
             )
         )
@@ -65,7 +65,7 @@ class AlertService:
         query = select(Alert).where(Alert.user_id == user_id)
 
         if active_only:
-            query = query.where(Alert.is_active == True)
+            query = query.where(Alert.is_active.is_(True))
 
         query = query.order_by(Alert.created_at.desc())
 
@@ -168,5 +168,5 @@ class AlertService:
 
         Called by Celery task to check for price changes.
         """
-        result = await self.db.execute(select(Alert).where(Alert.is_active == True))
+        result = await self.db.execute(select(Alert).where(Alert.is_active.is_(True)))
         return list(result.scalars().all())

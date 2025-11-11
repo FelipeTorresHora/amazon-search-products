@@ -1,20 +1,20 @@
 """Product search and analysis API endpoints."""
 
-from fastapi import APIRouter, Query, Depends
+from fastapi import APIRouter, Depends, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.security import check_user_plan, get_current_active_user
 from app.db.session import get_db
+from app.models.user import User
 from app.schemas.product import (
-    ProductSearchFilters,
-    ProductSearchResponse,
-    ProductDetail,
     BulkSearchRequest,
     BulkSearchResponse,
+    ProductDetail,
+    ProductSearchFilters,
+    ProductSearchResponse,
 )
 from app.services.product_service import ProductService
 from app.services.subscription_service import SubscriptionService
-from app.core.security import get_current_active_user, check_user_plan
-from app.models.user import User
 
 router = APIRouter()
 

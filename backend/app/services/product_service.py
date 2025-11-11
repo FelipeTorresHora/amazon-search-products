@@ -1,16 +1,16 @@
 """Product service - Amazon product search and analysis."""
 
-from typing import List, Dict, Any, Optional
+from typing import Any, Dict, List, Optional
+
 import httpx
-from datetime import datetime, timedelta
 import pandas as pd
 
 from app.config import settings
 from app.schemas.product import (
+    ProductDetail,
     ProductSearchFilters,
     ProductSearchResponse,
     ProductSearchResult,
-    ProductDetail,
 )
 
 
@@ -112,7 +112,7 @@ class ProductService:
 
             # Filter by Prime
             if filters.is_prime:
-                df = df[df["is_prime"] == True]
+                df = df[df["is_prime"]]
 
             # Sort
             if filters.sort_by == "price_asc":
@@ -191,7 +191,7 @@ class ProductService:
                 return None
             price_clean = str(price_str).replace("R$ ", "").replace(",", ".")
             return float(price_clean)
-        except:
+        except (ValueError, TypeError, AttributeError):
             return None
 
     @staticmethod
@@ -201,7 +201,7 @@ class ProductService:
             if pd.isna(rating_str):
                 return None
             return float(rating_str)
-        except:
+        except (ValueError, TypeError):
             return None
 
     @staticmethod
@@ -211,5 +211,5 @@ class ProductService:
             if pd.isna(value):
                 return None
             return int(value)
-        except:
+        except (ValueError, TypeError):
             return None

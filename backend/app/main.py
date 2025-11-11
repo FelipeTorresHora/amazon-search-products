@@ -5,16 +5,15 @@ FastAPI main application module.
 from contextlib import asynccontextmanager
 from typing import AsyncGenerator
 
+import sentry_sdk
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.responses import JSONResponse
-import sentry_sdk
 from sentry_sdk.integrations.fastapi import FastApiIntegration
 
+from app.api.v1 import alerts, analytics, auth, products, subscriptions, users
 from app.config import settings
-from app.api.v1 import auth, users, products, subscriptions, alerts, analytics
-
 
 # Initialize Sentry for error tracking (production)
 if settings.SENTRY_DSN and settings.is_production:

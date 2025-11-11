@@ -1,21 +1,17 @@
 """Price and stock alerts API endpoints."""
 
 from uuid import UUID
+
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.security import get_current_active_user
 from app.db.session import get_db
-from app.schemas.alert import (
-    AlertCreate,
-    AlertUpdate,
-    AlertResponse,
-    AlertListResponse,
-)
+from app.models.user import User
+from app.schemas.alert import AlertCreate, AlertListResponse, AlertResponse, AlertUpdate
 from app.schemas.user import MessageResponse
 from app.services.alert_service import AlertService
 from app.services.subscription_service import SubscriptionService
-from app.core.security import get_current_active_user
-from app.models.user import User
 
 router = APIRouter()
 

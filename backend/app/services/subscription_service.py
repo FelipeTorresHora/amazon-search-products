@@ -1,24 +1,20 @@
 """Subscription service - manage user subscriptions and billing."""
 
-from typing import Optional, List
 from datetime import datetime, timedelta
+from typing import List, Optional
 from uuid import UUID
 
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
-from fastapi import HTTPException, status
 import stripe
+from fastapi import HTTPException, status
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import settings
-from app.models.subscription import (
-    Subscription,
-    SubscriptionPlan,
-    SubscriptionStatus,
-)
-from app.models.user import User, UserRole
-from app.schemas.subscription import UsageStats, SubscriptionPlan as PlanSchema
 from app.core.security import generate_api_key
-
+from app.models.subscription import Subscription, SubscriptionPlan, SubscriptionStatus
+from app.models.user import User, UserRole
+from app.schemas.subscription import SubscriptionPlan as PlanSchema
+from app.schemas.subscription import UsageStats
 
 # Initialize Stripe
 stripe.api_key = settings.STRIPE_SECRET_KEY

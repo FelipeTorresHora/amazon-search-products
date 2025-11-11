@@ -7,18 +7,17 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.security import get_current_active_user, get_current_user
 from app.db.session import get_db
+from app.models.user import User
 from app.schemas.user import (
-    UserCreate,
-    UserResponse,
-    Token,
     MessageResponse,
     PasswordResetRequest,
+    Token,
+    UserCreate,
+    UserResponse,
 )
 from app.services.auth_service import AuthService
-from app.core.security import get_current_user, get_current_active_user
-from app.models.user import User
-
 
 router = APIRouter()
 
@@ -72,7 +71,7 @@ async def refresh_token(refresh_token: str, db: AsyncSession = Depends(get_db)):
 
     Returns new access_token with extended expiry.
     """
-    from app.core.security import decode_token, create_access_token
+    from app.core.security import create_access_token, decode_token
 
     payload = decode_token(refresh_token)
 

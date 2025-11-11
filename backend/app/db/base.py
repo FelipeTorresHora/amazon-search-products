@@ -2,14 +2,13 @@
 Database base configuration and utilities.
 """
 
-from datetime import datetime
 import uuid
+from datetime import datetime
 from typing import Any
 
 from sqlalchemy import Column, DateTime
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.ext.declarative import as_declarative, declared_attr
-from sqlalchemy.orm import DeclarativeBase
 
 
 @as_declarative()

@@ -1,8 +1,5 @@
 """Basic API tests."""
 
-import pytest
-from fastapi.testclient import TestClient
-
 # TODO: Import app after fixing circular imports
 # from app.main import app
 

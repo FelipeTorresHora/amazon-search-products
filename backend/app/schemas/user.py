@@ -3,8 +3,8 @@
 from datetime import datetime
 from typing import Optional
 from uuid import UUID
-from pydantic import BaseModel, EmailStr, Field, field_validator
 
+from pydantic import BaseModel, EmailStr, Field, field_validator
 
 # =============================================================================
 # USER SCHEMAS

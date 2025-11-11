@@ -1,22 +1,22 @@
 """Authentication service - handles user registration, login, tokens."""
 
-from typing import Optional, Tuple
-from datetime import datetime, timedelta
 import secrets
+from datetime import datetime, timedelta
+from typing import Optional, Tuple
 
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
 from fastapi import HTTPException, status
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.models.user import User, UserRole
-from app.models.subscription import Subscription, SubscriptionPlan, SubscriptionStatus
-from app.schemas.user import UserCreate
 from app.core.security import (
-    verify_password,
-    get_password_hash,
     create_access_token,
     create_refresh_token,
+    get_password_hash,
+    verify_password,
 )
+from app.models.subscription import Subscription, SubscriptionPlan, SubscriptionStatus
+from app.models.user import User, UserRole
+from app.schemas.user import UserCreate
 
 
 class AuthService:

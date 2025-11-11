@@ -3,11 +3,12 @@ Application configuration management.
 Loads settings from environment variables with validation.
 """
 
-from typing import List, Optional, Any
-from pydantic import Field, field_validator, PostgresDsn
-from pydantic_settings import BaseSettings, SettingsConfigDict
-from functools import lru_cache
 import secrets
+from functools import lru_cache
+from typing import Any, List, Optional
+
+from pydantic import Field, field_validator
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):

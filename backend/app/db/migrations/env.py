@@ -1,18 +1,16 @@
 """Alembic migration environment configuration."""
 
-from logging.config import fileConfig
 import asyncio
+from logging.config import fileConfig
 
+from alembic import context
 from sqlalchemy import pool
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
-from alembic import context
-
 # Import app config and models
 from app.config import settings
 from app.db.base import Base
-from app.models import user, subscription, alert  # Import all models
 
 # this is the Alembic Config object
 config = context.config
